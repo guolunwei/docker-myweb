@@ -1,0 +1,26 @@
+name: myweb
+version: "3"
+services:
+  nginxsvc:
+    container_name: nginx
+    image: myos:nginx
+    network_mode: bridge
+    ports:
+      - 80:80
+    volumes:
+      - type: bind
+        source: /var/webroot
+        target: /usr/local/nginx/html
+      - type: bind
+        source: /root/conf
+        target: /usr/local/nginx/conf
+  php-fpm:
+    container_name: php-fpm
+    image: myos:php-fpm
+    network_mode: "container:nginx"
+    depends_on:
+      - nginxsvc
+    volumes:
+      - type: bind
+        source: /var/webroot
+        target: /usr/local/nginx/html
